@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimal-ui">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>App</title>
+
+  <!-- polymer -->
+  <script src="../webcomponentsjs/webcomponents.js"></script>
+  <link rel="import" href="../polymer/polymer.html">
+
+  <link rel="import" href="at-app-embed-scaffold.html">
+  <link rel="import" href="../at-core-router/at-core-router.html" />
+
+  <script src="iframeResizer.contentWindow.js"></script>
+
+  <style>
+    html,
+    body {
+      padding: 0;
+      margin: 0;
+      font-family: 'Segoe UI', 'Segoe WP', 'Roboto', 'Frutiger', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      min-height: 150px;
+    }
+    .splash {
+      z-index: 100;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;      
+      display: none;
+    }
+    .splash[unresolved] {
+      background: white;
+      display: block;
+    }
+    .pulsar {
+      width: 60px;
+      height: 60px;
+      position: absolute;
+      left: calc(50% - 30px);
+      top: calc(50% - 30px);
+    }
+    .double-bounce1,
+    .double-bounce2 {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background-color: #05095b;
+      opacity: 0.4;
+      position: absolute;
+      top: 0;
+      left: 0;
+      -webkit-animation: bounce 2.0s infinite ease-in-out;
+      animation: bounce 2.0s infinite ease-in-out;
+    }
+    .double-bounce2 {
+      -webkit-animation-delay: -1.0s;
+      animation-delay: -1.0s;
+    }
+    @-webkit-keyframes bounce {
+      0%, 100% {
+        -webkit-transform: scale(0.0);
+      }
+      50% {
+        -webkit-transform: scale(1.0);
+      }
+    }
+    @keyframes bounce {
+      0%, 100% {
+        transform: scale(0.0);
+        -webkit-transform: scale(0.0);
+      }
+      50% {
+        transform: scale(1.0);
+        -webkit-transform: scale(1.0);
+      }
+    }
+  </style>
+
+</head>
+
+</head>
+
+<body touch-action="auto">
+  <polymer-element name="at-app-embed">
+
+    <template>
+      <style>
+        :host {
+          width: 100%;
+          height: auto;
+          box-sizing: border-box;
+          display: block;
+        }
+        #router {
+          overflow-y: auto !important;
+          -ms-overflow-y: auto !important;
+        }
+      </style>
+      <at-app-embed-scaffold id="core_scaffold" enableback="{{$.router.enableBack}}">
+        <div id="div" tool flex>{{$.router.caption}}</div>
+        <at-core-router id="router" caption="at-app" defaultview="at-app-embed-scaffold/demo-home"></at-core-router>
+      </at-app-embed-scaffold>
+
+    </template>
+
+    <script>
+      Polymer('at-app-embed', {
+
+        ready: function () {
+
+          // hide "splash" load animation
+          setTimeout(function () {
+            var splash = document.getElementsByClassName("splash");
+            for (var i = 0; i < splash.length; i++) {
+              splash[i].removeAttribute('unresolved');
+            }
+          }, 10);
+
+        }
+
+      });
+    </script>
+  </polymer-element>
+
+  <at-app-embed unresolved></at-app-embed>
+  <div class="splash" unresolved>
+    <div class="pulsar">
+      <div class="double-bounce1"></div>
+      <div class="double-bounce2"></div>
+    </div>
+  </div>
+</body>
+
+</html>
