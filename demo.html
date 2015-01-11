@@ -24,14 +24,15 @@
 
 
 <body touch-action="auto">
+    <div style="width:calc(50% - 10px); float:left;border:5px solid yellow;">
+    <div class="at-app-embed" src="http://localhost:50663/components/at-app-embed-scaffold/at-app-embed.html"></div>
+    <script src="at-app-embed.js" async></script>
+  </div>
   <div style="width:calc(50% - 10px); float:left;border:5px solid green;">
     <script src="at-app-embed.js" async></script>
-    <div class="at-app-embed"></div>
+    <div class="at-app-embed" app="at-app-scaffold/demo-home?who=test2" ></div>
   </div>
-  <div style="width:calc(50% - 10px); float:left;border:5px solid yellow;">
-    <div class="at-app-embed"></div>
-    <!--<script src="at-app-embed.js" async></script>-->
-  </div>
+
 
   <!--<iframe src="at-app-embed.html" width="100%" scrolling="no" frameborder="0"></iframe>-->
   <script>

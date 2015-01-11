@@ -278,7 +278,7 @@
 			}
 		}
 		else {
-			warn('MutationObserver not supported in this browser!');
+			// warn('MutationObserver not supported in this browser!');
 			initInterval();
 		}
 	}

@@ -8,13 +8,13 @@
 (function () {
   'use strict';
 
-      // initialize only once after async load
+  // initialize only once after async load
   if (!window.atAppEmbedLoaded) {
     window.atAppEmbedLoaded = true;
   } else {
     return;
   }
-  
+
   var
     count = 0,
     firstRun = true,
@@ -90,10 +90,10 @@
 
   function iFrameListener(event) {
     function resizeIFrame() {
-      function resize() {        
-          setSize(messageData);
-          setPagePosition();
-          settings.resizedCallback(messageData);        
+      function resize() {
+        setSize(messageData);
+        setPagePosition();
+        settings.resizedCallback(messageData);
       }
 
       ensureInRange('Height');
@@ -251,7 +251,7 @@
       case 'reset':
         resetIFrame(messageData);
         break;
-      case 'init':          
+      case 'init':
         resizeIFrame();
         settings.initCallback(messageData.iframe);
         break;
@@ -454,6 +454,7 @@
     return function iFrameResizeF(options, selecter) {
       processOptions(options);
       Array.prototype.forEach.call(document.querySelectorAll(selecter || 'iframe'), init);
+      window.iFrameResize.settings = settings;
     };
   }
 
@@ -470,9 +471,9 @@
 
 
   setupRequestAnimationFrame();
-  addEventListener(window, 'message', iFrameListener);  
+  addEventListener(window, 'message', iFrameListener);
   //window.addEventListener('message', iFrameListener.bind(this));
-  
+
 
   if (window.jQuery) {
     createJQueryPublicMethod(jQuery);
@@ -487,50 +488,83 @@
   }
 
 
-    // initialize only once after async load
-  if (!window.atAppEmbedLoaded) {
-    window.atAppEmbedLoaded = true;
-    createIFrames();
-  }
 
   // add IFrames to all div with class="at-app-embed"
   function createIFrames() {
 
     var ifs = document.getElementsByClassName("at-app-embed");
     for (var i = 0; i < ifs.length; i++) {
-      createIFrameForDiv(ifs[i], i == 0, i);
+      createIFrameForDiv(ifs[i], i);
     }
-        
+
     window.iFrameResize({
-      log: true
+      log: false
     });
 
     for (var i = 0; i < ifs.length; i++) {
-      var aae = document.getElementById("aae" + i);      
-      aae.src = aae.getAttribute("xsrc");
+      var aae = document.getElementById("aae" + i);
+      var url = aae.getAttribute("xsrc");
+      var app = aae.getAttribute("xapp");
+
+      if (i == 0) {
+        window.iFrameResize.settings.boundIFrame = aae;
+
+        var hash = window.location.hash || "";
+        if (hash.indexOf("#!") == 0) {
+          hash = hash.substr(2);
+        } else if (hash.indexOf("#") == 0) {
+          hash = hash.substr(1);
+        }
+
+        // if hash seems to be an app then replace default app 
+        if (hash.indexOf("/") > 0) {
+          app = hash;
+        }
+      }
+
+      if (app) {
+        url += "#!" + app;
+      }
+      aae.src = url;
+    }
+  }
+
+  window.onhashchange = function () {
+
+    if (window.iFrameResize.settings.boundIFrame == undefined) return;
+    var aae = window.iFrameResize.settings.boundIFrame;
+    var url = aae.getAttribute("xsrc");
+    var app = aae.getAttribute("xapp");
+
+    var hash = window.location.hash || "";
+    if (hash.indexOf("#!") == 0) {
+      hash = hash.substr(2);
+    } else if (hash.indexOf("#") == 0) {
+      hash = hash.substr(1);
     }
 
     
+    // if hash seems to be an app then replace default app 
+    if (hash.indexOf("/") > 0) {
+      url += "#!" + hash;
+      aae.src = url;
+    }
   }
 
-  function createIFrameForDiv(div, firstDiv, cntr) {
-    var src = "at-app-embed.html";
+  function createIFrameForDiv(div, cntr) {
+    var src = div.getAttribute("src") || "/components/at-app-embed-scaffold/at-app-embed.html";
+    var app = div.getAttribute("app") || "";
     var iframe = document.createElement('iframe');
     iframe.id = "aae" + cntr;
     iframe.frameBorder = 0;
     iframe.width = "100%";
     iframe.scrolling = "no";
     iframe.setAttribute("xsrc", src);
+    iframe.setAttribute("xapp", app);
     div.appendChild(iframe);
   }
 
-    createIFrames();
+  createIFrames();
 
 
 })();
-
-
-
-
-
-  
