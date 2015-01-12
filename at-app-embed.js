@@ -474,7 +474,7 @@
   addEventListener(window, 'message', iFrameListener);
   //window.addEventListener('message', iFrameListener.bind(this));
 
-
+  /* don't use accidentially existing jquery from parent
   if (window.jQuery) {
     createJQueryPublicMethod(jQuery);
   }
@@ -486,8 +486,10 @@
   } else {
     window.iFrameResize = createNativePublicFunction();
   }
+  */
 
-
+  /* always create a new public, probably we should adjust the name */
+  window.iFrameResize = createNativePublicFunction();
 
   // add IFrames to all div with class="at-app-embed"
   function createIFrames() {
@@ -496,7 +498,7 @@
     for (var i = 0; i < ifs.length; i++) {
       createIFrameForDiv(ifs[i], i);
     }
-
+    debugger;
     window.iFrameResize({
       log: false
     });
@@ -543,7 +545,6 @@
       hash = hash.substr(1);
     }
 
-    
     // if hash seems to be an app then replace default app 
     if (hash.indexOf("/") > 0) {
       url += "#!" + hash;
