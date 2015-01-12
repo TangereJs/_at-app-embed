@@ -498,7 +498,7 @@
     for (var i = 0; i < ifs.length; i++) {
       createIFrameForDiv(ifs[i], i);
     }
-    debugger;
+    
     window.iFrameResize({
       log: false
     });
