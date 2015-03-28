@@ -468,8 +468,6 @@
   }
 
 
-
-
   setupRequestAnimationFrame();
   addEventListener(window, 'message', iFrameListener);
   //window.addEventListener('message', iFrameListener.bind(this));
@@ -491,6 +489,8 @@
   /* always create a new public, probably we should adjust the name */
   window.iFrameResize = createNativePublicFunction();
 
+  /* todo update outer hash when boundIFrame hash changes */
+  
   // add IFrames to all div with class="at-app-embed"
   function createIFrames() {
 
@@ -500,9 +500,9 @@
     }
     
     window.iFrameResize({
-      log: true
+      log: false
     });
-
+    
     for (var i = 0; i < ifs.length; i++) {
       var aae = document.getElementById("aae" + i);
       var url = aae.getAttribute("xsrc");
@@ -532,7 +532,7 @@
   }
 
   window.onhashchange = function () {
-
+    
     if (window.iFrameResize.settings.boundIFrame == undefined) return;
     var aae = window.iFrameResize.settings.boundIFrame;
     var url = aae.getAttribute("xsrc");
