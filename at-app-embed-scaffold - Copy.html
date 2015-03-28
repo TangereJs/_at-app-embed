@@ -1,0 +1,48 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="at-app-embed-scaffold">
+  <template>
+
+    <style>
+      :host {
+        display: block;
+      }
+      [main] {
+        height: 100%;
+        background-color: #eee;
+      }
+    </style>
+
+
+    <div id="caption">
+      <content select="[tool]"></content>
+    </div>
+    <content select="*"></content>
+
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'at-app-embed-scaffold',
+    publish: {
+      enableBack: {
+        value: false,
+        reflect: true
+      }
+    },
+    enableBackChanged: function () {
+      this.updateButtons();
+    },
+    backButtonActive: function () {
+
+      var back = this.enableBack;
+      if (navigator.userAgent.toLowerCase().indexOf("android") > -1) back = false; // android has "hardware" back button, so we don't never need to show one
+
+      return back;
+    },
+    updateButtons: function () {
+
+    }
+  });
+</script>

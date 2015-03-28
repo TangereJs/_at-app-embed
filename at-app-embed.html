@@ -10,12 +10,10 @@
   <title>App</title>
 
   <!-- polymer -->
-  <script src="../webcomponentsjs/webcomponents.js"></script>
+  <script src="../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../polymer/polymer.html">
 
-  <link rel="import" href="at-app-embed-scaffold.html">
-  <link rel="import" href="../at-core-router/at-core-router.html" />
-
+  <link rel="import" href="at-app-embed-container.html">  
   <script src="iframeResizer.contentWindow.js"></script>
 
   <style>
@@ -24,7 +22,7 @@
       padding: 0;
       margin: 0;
       font-family: 'Segoe UI', 'Segoe WP', 'Roboto', 'Frutiger', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      min-height: 150px;
+      xmin-height: 150px;
     }
     .splash {
       z-index: 100;
@@ -85,57 +83,14 @@
 
 </head>
 
-</head>
-
 <body touch-action="auto">
-  <polymer-element name="at-app-embed">
-
-    <template>
-      <style>
-        :host {
-          width: 100%;
-          height: auto;
-          box-sizing: border-box;
-          display: block;
-        }
-        #router {
-          overflow-y: auto !important;
-          -ms-overflow-y: auto !important;
-        }
-      </style>
-      <at-app-embed-scaffold id="core_scaffold" enableback="{{$.router.enableBack}}">
-        <div id="div" tool flex>{{$.router.caption}}</div>
-        <at-core-router id="router" caption="at-app" defaultview="at-app-embed-scaffold/demo-embed-home"></at-core-router>
-      </at-app-embed-scaffold>
-
-    </template>
-
-    <script>
-      Polymer('at-app-embed', {
-
-        ready: function () {
-
-          // hide "splash" load animation
-          setTimeout(function () {
-            var splash = document.getElementsByClassName("splash");
-            for (var i = 0; i < splash.length; i++) {
-              splash[i].removeAttribute('unresolved');
-            }
-          }, 10);
-
-        }
-
-      });
-    </script>
-  </polymer-element>
-
-  <at-app-embed unresolved></at-app-embed>
-  <div class="splash" unresolved>
+  <at-app-embed-container></at-app-embed-container>
+  <!--<div class="splash" unresolved>
     <div class="pulsar">
       <div class="double-bounce1"></div>
       <div class="double-bounce2"></div>
     </div>
-  </div>
+  </div> -->
 </body>
 
 </html>

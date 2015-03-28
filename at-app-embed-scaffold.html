@@ -1,83 +1,39 @@
-<!--
-Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-<!--
-`at-app-scaffold` provides general application layout, introducing a
-responsive scaffold containing a header, toolbar, menu, title and
-areas for application content.
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../layout/layout.html">
+<link rel="import" href="../at-core-theme/at-core-theme.html">
 
-Example:
+<dom-module id="at-app-embed-scaffold">
+  <style>
+    :host {
+      display:block;
+    }
+    .mainwrapper {
+      margin-top: 0;
+    }
 
-    <at-app-scaffold>
-      <core-header-panel navigation flex mode="seamed">
-        <core-toolbar>Application</core-toolbar>
-        <core-menu theme="core-light-theme">
-          <core-item icon="settings" label="item1"></core-item>
-          <core-item icon="settings" label="item2"></core-item>
-        </core-menu>
-      </core-header-panel>
-      <div tool>Title</div>
-      <div>Content goes here...</div>
-    </at-app-scaffold>
-
-Use `mode` to control the header and scrolling behavior of `core-header-panel`
-and `responsiveWidth` to change the layout of the scaffold.
-
-@group Polymer Core Elements
-@element at-app-scaffold
-@homepage github.io
--->
-
-
-<link rel="import" href="../core-icons/core-icons.html">
-<link rel="import" href="../paper-icon-button/paper-icon-button.html">
-
-<polymer-element name="at-app-embed-scaffold">
+  </style>
   <template>
-
-    <style>
-      :host {
-        display: block;
-      }
-
-      [main] {
-        height: 100%;
-        background-color: #eee;
-      }
-
-    </style>
-
-
-    <div id="caption"><content select="[tool]"></content></div>
-    <content select="*"></content>
-
+    <at-core-theme></at-core-theme>
+    <div id="mainwrapper" class="mainwrapper">
+      <content select=".main"></content>
+    </div>
   </template>
-  <script>
+</dom-module>
 
-    Polymer('at-app-embed-scaffold', {
-
-      publish: {
-        enableBack: { value: false, reflect: true }
-      },      
-      enableBackChanged: function () {
-        this.updateButtons();
-      },
-      backButtonActive: function () {
-
-        var back = this.enableBack;
-        if (navigator.userAgent.toLowerCase().indexOf("android") > -1) back = false; // android has "hardware" back button, so we don't never need to show one
-
-        return back;
-      },
-      updateButtons: function () {
-
+<script>
+  Polymer({
+    is: 'at-app-embed-scaffold',
+    properties: {
+      caption: {
+        type: String,
+        value: '',
+        notify: true
       }
-    });
+    },
+    attached: function () {
+      this.removeAttribute('unresolved');
+    },
+    ready: function () {}
+  });
+</script>
 
-  </script>
-</polymer-element>

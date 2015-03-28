@@ -9,8 +9,6 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <title>App Embed Sample</title>
 
-  <!--<script src="iframeResizer.js"></script>-->
-
   <style>
     html,
     body {
@@ -24,27 +22,10 @@
 
 
 <body touch-action="auto">
-    <div style="width:calc(50% - 10px); float:left;border:5px solid yellow;">
-    <div class="at-app-embed" src="http://localhost:50663/components/at-app-embed-scaffold/at-app-embed.html"></div>
+  <div style="width:calc(100% - 10px); float:left;border:5px solid green;">
     <script src="at-app-embed.js" async></script>
+    <div class="at-app-embed" app="at-app-scaffold/demo-home?who=test2"></div>
   </div>
-  <div style="width:calc(50% - 10px); float:left;border:5px solid green;">
-    <script src="at-app-embed.js" async></script>
-    <div class="at-app-embed" app="at-app-scaffold/demo-home?who=test2" ></div>
-  </div>
-
-
-  <!--<iframe src="at-app-embed.html" width="100%" scrolling="no" frameborder="0"></iframe>-->
-  <script>
-    /*
-    iFrameResize({
-      log: true,
-      resizedCallback: function (messageData) {
-        console.log("resizeCallback");
-      }
-    });
-    */
-  </script>
 </body>
 
 </html>

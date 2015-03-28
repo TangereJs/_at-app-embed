@@ -41,7 +41,7 @@
       bodyPadding: null,
       checkOrigin: true,
       enablePublicMethods: false,
-      heightCalculationMethod: 'offset',
+      heightCalculationMethod: 'bodyScroll', // 'offset',
       interval: 32,
       log: false,
       maxHeight: Infinity,
@@ -500,7 +500,7 @@
     }
     
     window.iFrameResize({
-      log: false
+      log: true
     });
 
     for (var i = 0; i < ifs.length; i++) {
@@ -553,7 +553,7 @@
   }
 
   function createIFrameForDiv(div, cntr) {
-    var src = div.getAttribute("src") || "/components/at-app-embed-scaffold/at-app-embed.html";
+    var src = div.getAttribute("src") || "/components/at-app-embed/at-app-embed.html";
     var app = div.getAttribute("app") || "";
     var iframe = document.createElement('iframe');
     iframe.id = "aae" + cntr;

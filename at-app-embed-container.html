@@ -1,0 +1,35 @@
+<link rel="import" href="../polymer/polymer.html">
+
+<link rel="import" href="at-app-embed-scaffold.html">
+<link rel="import" href="../at-core-router/at-core-router.html" />
+
+<dom-module id="at-app-embed-container">
+  <style>
+    :host {
+      width: 100%;
+      box-sizing: border-box;
+      display: block;
+    }
+  </style>
+
+  <template>
+    <at-app-embed-scaffold unresolved caption="Scaffold Demo">
+      <div class="main">
+        <at-core-router id="router" caption="at-app" default-view="at-app-scaffold/demo-home"></at-core-router>
+      </div>
+    </at-app-embed-scaffold>
+
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'at-app-embed-container',
+    ready: function () {
+
+    }
+
+  });
+</script>
+
+
