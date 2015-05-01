@@ -1,7 +1,8 @@
 <link rel="import" href="../polymer/polymer.html">
 
 <link rel="import" href="at-app-embed-scaffold.html">
-<link rel="import" href="../at-core-router/at-core-router.html" />
+<link rel="import" href="../at-core-router/at-core-router.html">
+<link rel="import" href="../at-app-session/at-app-session.html">
 
 <dom-module id="at-app-embed-container">
   <style>
@@ -13,18 +14,19 @@
   </style>
 
   <template>
-    <at-app-embed-scaffold unresolved caption="Scaffold Demo">
+    <at-app-embed-scaffold caption="Scaffold Demo">
       <div class="main">
-        <at-core-router id="router" caption="at-app" default-view="at-app-scaffold/demo-home"></at-core-router>
+        <at-core-router id="router" caption="at-app" default-view="at-now/start-now"></at-core-router>
       </div>
     </at-app-embed-scaffold>
-
+    <at-app-session></at-app-session>
   </template>
 </dom-module>
 
 <script>
   Polymer({
     is: 'at-app-embed-container',
+    _scopeCssViaAttr: true,
     ready: function () {
 
     }

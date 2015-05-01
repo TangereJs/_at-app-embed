@@ -1,20 +1,71 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../layout/layout.html">
+<link rel="import" href="../core-media-query/core-media-query.html">
+<link rel="import" href="../at-core-signals/at-core-signals.html">
+<link rel="import" href="../at-core-busy/at-core-busy.html">
+<link rel="import" href="../at-carbon-icon/at-carbon-icon.html">
 <link rel="import" href="../at-core-theme/at-core-theme.html">
 
 <dom-module id="at-app-embed-scaffold">
   <style>
-    :host {
-      display:block;
+
+    #hamburger {
+      display: inline-block;
     }
+
     .mainwrapper {
-      margin-top: 0;
+      padding-top: 60px;
+    }
+
+    #menu {
+      cursor: pointer;
+      width: 24px;
+    }
+
+    #back {
+      cursor: pointer;
+      width: 24px;
+      margin-right: 8px;
+    }
+
+    .bar {
+      width: 100%;
+      padding: 16px !important;
+      height: 60px;
+      z-index: 100;
+      top: 0;
+      left: 0;
+      position: fixed;
+    }
+
+    .bar a {
+      text-decoration: none;
     }
 
   </style>
   <template>
     <at-core-theme></at-core-theme>
-    <div id="mainwrapper" class="mainwrapper">
+    <at-core-signals on-before-navigate="beforeNavigate" on-navigate-back-status="navigateBackStatus" on-app-caption="appCaption"></at-core-signals>
+    <core-media-query id="mq" query="min-width: 1025px" on-query-matches-changed="mqChanged"></core-media-query>
+    <div id="bar" class="bar layout horizontal center">
+      <!--<div class="layout horizontal center" id="back" on-tap="backClick">
+        <at-carbon-icon icon="now:arrow-left"></at-carbon-icon>
+      </div>-->
+      <div class="layout horizontal flex">
+        <header id="internalheader">
+          <div class="layout vertical center">{{caption}}</div>
+        </header>
+      </div>
+      <div id="busy">
+        <div class="layout vertical center ">
+          <at-core-busy></at-core-busy>
+        </div>
+      </div>
+      <!--<div id="menu" on-tap="menuClick" class="layout horizontal">
+        <at-carbon-icon icon="now:menu"></at-carbon-icon>
+      </div>-->
+    </div>
+    <div id="mainwrapper" class="mainwrapper" on-router-navigate="routerNavigate">
       <content select=".main"></content>
     </div>
   </template>
@@ -23,17 +74,41 @@
 <script>
   Polymer({
     is: 'at-app-embed-scaffold',
+    _scopeCssViaAttr: true,
     properties: {
       caption: {
         type: String,
-        value: '',
+        value: 'adenin Mobility Portal',
         notify: true
       }
+    },
+
+    mqChanged: function () {
+
+    },
+
+    backClick: function () {
+      window.history.back();
+    },
+    navigateBackStatus: function (e) {
+      //this.$.back.style.display = e.detail ? "block" : "none"
+    },
+    menuClick: function () {
+      this.sidebar = !this.sidebar;
+    },
+    beforeNavigate: function (e) {
+
+    },
+    appCaption: function (e) {
+      this.caption = e.detail;
     },
     attached: function () {
       this.removeAttribute('unresolved');
     },
-    ready: function () {}
+    ready: function () {
+      this.router = Polymer.dom(this).querySelector("#router");
+
+    }
   });
 </script>
 

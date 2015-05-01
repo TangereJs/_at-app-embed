@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 
 <head>
@@ -20,6 +20,7 @@
     body {
       padding: 0;
       margin: 0;
+      background: transparent !important;
     }
     .splash {
       z-index: 100;
@@ -30,10 +31,11 @@
       height: 100%;      
       display: none;
     }
-    .splash[unresolved] {
-      background: white;
-      display: block;
+ 
+    #splash.hide {
+        display: none;
     }
+
     .pulsar {
       width: 60px;
       height: 60px;
@@ -82,12 +84,12 @@
 
 <body touch-action="auto">
   <at-app-embed-container></at-app-embed-container>
-  <!--<div class="splash" unresolved>
+  <div id="splash">
     <div class="pulsar">
       <div class="double-bounce1"></div>
       <div class="double-bounce2"></div>
     </div>
-  </div> -->
+  </div>
 </body>
 
 </html>
