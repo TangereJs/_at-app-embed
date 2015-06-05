@@ -236,28 +236,28 @@
 
     function actionMsg() {
       switch (messageData.type) {
-      case 'close':
-        closeIFrame(messageData.iframe);
-        settings.resizedCallback(messageData); //To be removed.
-        break;
-      case 'message':
-        forwardMsgFromIFrame();
-        break;
-      case 'scrollTo':
-        scrollRequestFromChild(false);
-        break;
-      case 'scrollToOffset':
-        scrollRequestFromChild(true);
-        break;
-      case 'reset':
-        resetIFrame(messageData);
-        break;
-      case 'init':
-        resizeIFrame();
-        settings.initCallback(messageData.iframe);
-        break;
-      default:
-        resizeIFrame();
+        case 'close':
+          closeIFrame(messageData.iframe);
+          settings.resizedCallback(messageData); //To be removed.
+          break;
+        case 'message':
+          forwardMsgFromIFrame();
+          break;
+        case 'scrollTo':
+          scrollRequestFromChild(false);
+          break;
+        case 'scrollToOffset':
+          scrollRequestFromChild(true);
+          break;
+        case 'reset':
+          resetIFrame(messageData);
+          break;
+        case 'init':
+          resizeIFrame();
+          settings.initCallback(messageData.iframe);
+          break;
+        default:
+          resizeIFrame();
       }
     }
 
@@ -567,7 +567,25 @@
   }
 
   function createIFrameForDiv(div, cntr) {
-    var serverUrl = document.currentScript.src.toLowerCase().replace("/components/at-app-embed/at-app-embed.js", "");
+    var me = "/components/at-app-embed/at-app-embed.js";
+    var serverUrl = "";
+    
+    if(!!document.currentScript) {
+      
+      serverUrl = document.currentScript.src.toLowerCase();
+      
+    } else {
+      
+      // browser without currentScript
+      for(var i=0;i<document.scripts.length;i++) {
+        if(document.scripts[i].src.indexOf(me)>0) {
+          serverUrl = document.scripts[i].src;
+        }
+      }
+    }
+    
+    serverUrl = serverUrl.replace(me,"");
+    debugger;
     var p = serverUrl.indexOf("?");
     if(p>=0) serverUrl = serverUrl.substring(0,p);
     var src = div.getAttribute("src") || serverUrl + "/Embed";
