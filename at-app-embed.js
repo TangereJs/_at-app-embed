@@ -568,6 +568,8 @@
 
   function createIFrameForDiv(div, cntr) {
     var serverUrl = document.currentScript.src.toLowerCase().replace("/components/at-app-embed/at-app-embed.js", "");
+    var p = serverUrl.indexOf("?");
+    if(p>=0) serverUrl = serverUrl.substring(0,p);
     var src = div.getAttribute("src") || serverUrl + "/Embed";
     var app = div.getAttribute("app") || "";
     var iframe = document.createElement('iframe');
