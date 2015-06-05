@@ -585,7 +585,7 @@
     }
     
     serverUrl = serverUrl.replace(me,"");
-    debugger;
+
     var p = serverUrl.indexOf("?");
     if(p>=0) serverUrl = serverUrl.substring(0,p);
     var src = div.getAttribute("src") || serverUrl + "/Embed";
