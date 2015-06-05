@@ -14,7 +14,7 @@
     }
 
     .mainwrapper {
-      padding-top: 60px;
+      padding-top: 80px;
     }
 
     #menu {
@@ -31,7 +31,7 @@
     .bar {
       width: 100%;
       padding: 16px !important;
-      height: 60px;
+      height: 80px;
       z-index: 100;
       top: 0;
       left: 0;
@@ -40,6 +40,10 @@
 
     .bar a {
       text-decoration: none;
+    }
+
+    at-core-busy {
+      width: 48px;
     }
 
   </style>
@@ -53,12 +57,12 @@
       </div>-->
       <div class="layout horizontal flex">
         <header id="internalheader">
-          <div class="layout vertical center">{{caption}}</div>
+          <div class="layout vertical center"><h1>{{caption}}</h1></div>
         </header>
       </div>
       <div id="busy">
         <div class="layout vertical center ">
-          <at-core-busy></at-core-busy>
+          <at-core-busy type="wave"></at-core-busy>
         </div>
       </div>
       <!--<div id="menu" on-tap="menuClick" class="layout horizontal">
@@ -106,8 +110,8 @@
       this.removeAttribute('unresolved');
     },
     ready: function () {
-      this.router = Polymer.dom(this).querySelector("#router");
-
+      console.log("at-app-embed-scaffold ready");
+      this.router = Polymer.dom(this).querySelector("#router");      
     }
   });
 </script>

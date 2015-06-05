@@ -31,6 +31,7 @@
       bodyScroll: 1,
       documentElementScroll: 1
     },
+
     settings = {},
 
     defaults = {
@@ -40,7 +41,7 @@
       bodyMarginV1: 8,
       bodyPadding: null,
       checkOrigin: true,
-      enablePublicMethods: false,
+      enablePublicMethods: true,
       heightCalculationMethod: 'bodyScroll', // 'offset',
       interval: 32,
       log: false,
@@ -498,10 +499,23 @@
     for (var i = 0; i < ifs.length; i++) {
       createIFrameForDiv(ifs[i], i);
     }
+
+    var options = {};
+
+    // process sendMessage from iFrame
+    options.messageCallback = function (msg) {
+            
+      switch (msg.message.cmd) {
+
+        // navigate main window to new url
+        case 'navigate-to':  
+          var url = msg.message.url;
+          window.location = url;
+          break;
+      }
+    }
     
-    window.iFrameResize({
-      log: false
-    });
+    window.iFrameResize(options);
     
     for (var i = 0; i < ifs.length; i++) {
       var aae = document.getElementById("aae" + i);
@@ -553,7 +567,8 @@
   }
 
   function createIFrameForDiv(div, cntr) {
-    var src = div.getAttribute("src") || "/components/at-app-embed/at-app-embed.html";
+    var serverUrl = document.currentScript.src.toLowerCase().replace("/components/at-app-embed/at-app-embed.js", "");
+    var src = div.getAttribute("src") || serverUrl + "/Embed";
     var app = div.getAttribute("app") || "";
     var iframe = document.createElement('iframe');
     iframe.id = "aae" + cntr;
@@ -564,6 +579,7 @@
     iframe.setAttribute("xapp", app);
     div.appendChild(iframe);
   }
+ 
 
   createIFrames();
 

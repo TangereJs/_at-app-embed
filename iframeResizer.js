@@ -19,7 +19,7 @@
 		pagePosition          = null,
 		requestAnimationFrame = window.requestAnimationFrame,
 		resetRequiredMethods  = {max:1,scroll:1,bodyScroll:1,documentElementScroll:1},
-		settings              = {},
+		settings              = { },
 
 		defaults              = {
 			autoResize                : true,

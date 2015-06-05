@@ -7,13 +7,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimal-ui">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>App</title>
+  <title>App</title>  
 
   <script src="../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../polymer/polymer.html">
-
-  <link rel="import" href="at-app-embed-container.html">  
   <script src="iframeResizer.contentWindow.js"></script>
+
+  <link rel="import" href="../tangere/Tangere.html">  
+
+  
+
+  <!--<link rel="import" href="at-app-embed-container.html">-->
+
 
   <style>
     html,
@@ -22,18 +26,19 @@
       margin: 0;
       background: transparent !important;
     }
+
     .splash {
       z-index: 100;
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
-      height: 100%;      
+      height: 100%;
       display: none;
     }
- 
+
     #splash.hide {
-        display: none;
+      display: none;
     }
 
     .pulsar {
@@ -43,6 +48,7 @@
       left: calc(50% - 30px);
       top: calc(50% - 30px);
     }
+
     .double-bounce1,
     .double-bounce2 {
       width: 100%;
@@ -56,23 +62,28 @@
       -webkit-animation: bounce 2.0s infinite ease-in-out;
       animation: bounce 2.0s infinite ease-in-out;
     }
+
     .double-bounce2 {
       -webkit-animation-delay: -1.0s;
       animation-delay: -1.0s;
     }
+
     @-webkit-keyframes bounce {
       0%, 100% {
         -webkit-transform: scale(0.0);
       }
+
       50% {
         -webkit-transform: scale(1.0);
       }
     }
+
     @keyframes bounce {
       0%, 100% {
         transform: scale(0.0);
         -webkit-transform: scale(0.0);
       }
+
       50% {
         transform: scale(1.0);
         -webkit-transform: scale(1.0);
@@ -82,8 +93,10 @@
 
 </head>
 
-<body touch-action="auto">
-  <at-app-embed-container></at-app-embed-container>
+<body>
+  <div id="container">
+    <!--<at-app-embed-container></at-app-embed-container>-->
+  </div>
   <div id="splash">
     <div class="pulsar">
       <div class="double-bounce1"></div>

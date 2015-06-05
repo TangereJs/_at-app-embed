@@ -27,7 +27,7 @@
 		initLock              = true,
 		initMsg               = '',
 		interval              = 32,
-		logging               = false,
+		logging               = true,
 		msgID                 = '[iFrameSizer]',  //Must match host page msg ID
 		msgIdLen              = msgID.length,
 		myID                  = '',
@@ -77,7 +77,26 @@
 		stopInfiniteResizingOfIFrame();
 		setupPublicMethods();
 		startEventListeners();
-		sendSize('init','Init message from host page');
+		sendSize('init', 'Init message from host page');
+
+	  // -- load at-app-embed-container component AFTER iFrame, WebComponents AND 
+	  //        at-app-embed-container are initialized    
+		var loader = function () {
+		  Polymer.Base.importHref((window.ComponentsBase || "/components/") + "at-app-embed/at-app-embed-container.html", function () {
+		    var container = document.getElementById("container");
+		    var el = document.createElement("at-app-embed-container");
+		    container.appendChild(el);
+		  });
+		}
+
+    // initialize at-app-embed-container when web components are already ready
+		if (!window.CustomElements.ready) {
+		  document.addEventListener('WebComponentsReady', function () {
+		    loader();
+		  });
+		} else {
+		  loader();
+		}
 	}
 
 	function readData(){
@@ -99,7 +118,8 @@
 		heightCalcMode   = (undefined !== data[8]) ? data[8]           : heightCalcMode;
 		bodyBackground   = data[9];
 		bodyPadding      = data[10];
-		tolerance        = (undefined !== data[11]) ? Number(data[11]) : tolerance;
+		tolerance = (undefined !== data[11]) ? Number(data[11]) : tolerance;
+		
 	}
 
 	function chkCSS(attr,value){
@@ -172,7 +192,8 @@
 		document.body.appendChild(clearFix);
 	}
 
-	function setupPublicMethods(){
+	function setupPublicMethods() {
+	  
 		if (publicMethods) {
 			log('Enable public methods');
 
