@@ -53,10 +53,10 @@
       sizeHeight: true,
       sizeWidth: false,
       tolerance: 0,
-      closedCallback: function () {},
-      initCallback: function () {},
-      messageCallback: function () {},
-      resizedCallback: function () {}
+      closedCallback: function () { },
+      initCallback: function () { },
+      messageCallback: function () { },
+      resizedCallback: function () { }
     };
 
   function addEventListener(obj, evt, func) {
@@ -491,7 +491,7 @@
   window.iFrameResize = createNativePublicFunction();
 
   /* todo update outer hash when boundIFrame hash changes */
-  
+
   // add IFrames to all div with class="at-app-embed"
   function createIFrames() {
 
@@ -504,19 +504,19 @@
 
     // process sendMessage from iFrame
     options.messageCallback = function (msg) {
-            
+
       switch (msg.message.cmd) {
 
         // navigate main window to new url
-        case 'navigate-to':  
+        case 'navigate-to':
           var url = msg.message.url;
           window.location = url;
           break;
       }
     }
-    
+
     window.iFrameResize(options);
-    
+
     for (var i = 0; i < ifs.length; i++) {
       var aae = document.getElementById("aae" + i);
       var url = aae.getAttribute("xsrc");
@@ -546,7 +546,7 @@
   }
 
   window.onhashchange = function () {
-    
+
     if (window.iFrameResize.settings.boundIFrame == undefined) return;
     var aae = window.iFrameResize.settings.boundIFrame;
     var url = aae.getAttribute("xsrc");
@@ -573,34 +573,38 @@
     var sideMode = div.getAttribute("mode") == "side";
     var triggerId = div.getAttribute("trigger");
     var triggerEl;
+    var style = "";
 
     if (triggerId) {
       triggerEl = document.getElementById(triggerId);
     }
 
     if (sideMode) {
-      div.setAttribute("style", "display:none;width:400px;position: absolute;top: 0;z-index: 20001;height: 100vh;overflow-y: scroll;borderleft: 1px solid lightgrey;right: 0;");
+      style = "display:none;background-color:#f9f9f9;width:400px;position:fixed;top: 0;z-index: 20001;height: 100vh;overflow-y: scroll;borderleft: 1px solid lightgrey;right: -400px;"
+      style += "transform: translate3d(0, 0, 0);-webkit-transition: 0.3s;-moz-transition: 0.3s;-ms-transition: 0.3s;";
+
+      div.setAttribute("style", style);
     }
 
 
-    if(!!document.currentScript) {
-      
+    if (!!document.currentScript) {
+
       serverUrl = document.currentScript.src.toLowerCase();
-      
+
     } else {
-      
+
       // browser without currentScript
-      for(var i=0;i<document.scripts.length;i++) {
-        if(document.scripts[i].src.indexOf(me)>0) {
+      for (var i = 0; i < document.scripts.length; i++) {
+        if (document.scripts[i].src.indexOf(me) > 0) {
           serverUrl = document.scripts[i].src;
         }
       }
     }
-    
-    serverUrl = serverUrl.replace(me,"");    
+
+    serverUrl = serverUrl.replace(me, "");
 
     var p = serverUrl.indexOf("?");
-    if(p>=0) serverUrl = serverUrl.substring(0,p);
+    if (p >= 0) serverUrl = serverUrl.substring(0, p);
     var src = div.getAttribute("src") || serverUrl + "/Embed";
     var app = div.getAttribute("app") || "";
     var iframe = document.createElement('iframe');
@@ -616,31 +620,41 @@
     if (sideMode) {
       var mask = document.createElement('div');
       mask.id = "aae" + cntr + "mask";
-      var style = "display: none; position: fixed;top: 0;left: 0;right: 0;bottom: 0; margin-right: 400px; background-color: black;-webkit-transform: translate3d(0, 0, 0);";
-      style += "transform: translate3d(0, 0, 0);z-index: 20000;-webkit-transition: opacity 0.5s ease-in-out;-moz-transition: opacity 0.5s ease-in-out;-ms-transition: opacity 0.5s ease-in-out;";
-      style += "-o-transition: opacity 0.5s ease-in-out;transition: opacity 0.5s ease-in-out;";
+      style = "display: none; position: fixed;top: 0;left: 0;right: 0;bottom: 0; background-color: black;-webkit-transform: translate3d(0, 0, 0);";
+      style += "transform: translate3d(0, 0, 0);z-index: 20000;-webkit-transition: opacity 0.3s ease-in-out;-moz-transition: opacity 0.3s ease-in-out;-ms-transition: opacity 0.3s ease-in-out;";
+      style += "-o-transition: opacity 0.3s ease-in-out;transition: opacity 0.3s ease-in-out;opacity:0";
       mask.setAttribute('style', style);
-      div.appendChild(mask);
+
+      // Prepend mask      
+      div.parentNode.insertBefore(mask, div);
 
       if (!triggerEl) {
         alert("sidebar mode requires attribute trigger='id'");
 
       } else {
 
-        triggerEl.onclick = function (e) {        
+        triggerEl.onclick = function (e) {
           bodyOverflow = document.body.style.overflow;
-          mask.style.display = "block";
-          mask.style.opacity = 0.5;
+          mask.style.display = "block";         
           div.style.display = "block";
-          document.body.style.overflow = "hidden";          
+          document.body.style.overflow = "hidden";
+          setTimeout(function () {
+            mask.style.opacity = 0.5;
+            div.style.right = 0;
+          }, 10);
+          
         }
       }
 
-      mask.onclick = function () {       
-        mask.style.opacity = 0;        
-        div.style.display = "none";
+      mask.onclick = function () {
+        mask.style.opacity = 0;
+        div.style.right = "-400px";     
         document.body.style.overflow = bodyOverflow;
-        mask.style.display = "none";
+
+        setTimeout(function () {
+          div.style.display = "none";          
+          mask.style.display = "none";
+        }, 400);
       }
 
     }
