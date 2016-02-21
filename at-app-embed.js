@@ -292,7 +292,7 @@
       window.scrollTo(pagePosition.x, pagePosition.y);
       log(' Set position: ' + pagePosition.x + ',' + pagePosition.y);
       pagePosition = null;
-    }
+    }    
   }
 
   function resetIFrame(messageData) {
@@ -379,7 +379,16 @@
       }
     }
 
-    function createOutgoingMsg() {
+    function createInitMsg() {
+
+      var zone = "protected";
+      var status = window.status;
+
+      // try to detect IE Intranet zone, when IE IFrame is in different zone access to cookies is restricted
+      window.status = "Intranet Zone";
+      if (window.status == "Intranet Zone") zone = "internal";
+      window.status = status;
+
       return iframeID +
         ':' + settings.bodyMarginV1 +
         ':' + settings.sizeWidth +
@@ -391,7 +400,8 @@
         ':' + settings.heightCalculationMethod +
         ':' + settings.bodyBackground +
         ':' + settings.bodyPadding +
-        ':' + settings.tolerance;
+        ':' + settings.tolerance +
+        ':' + zone;
     }
 
     function init(msg) {
@@ -423,7 +433,7 @@
     setScrolling();
     setLimits();
     setupBodyMarginValues();
-    init(createOutgoingMsg());
+    init(createInitMsg());
   }
 
   function checkOptions(options) {
@@ -504,13 +514,18 @@
 
     // process sendMessage from iFrame
     options.messageCallback = function (msg) {
-
+     
       switch (msg.message.cmd) {
 
         // navigate main window to new url
         case 'navigate-to':
           var url = msg.message.url;
           window.location = url;
+          break;
+
+        case 'scroll-into-view':
+          msg.iframe.scrollIntoView();
+          msg.iframe.style.height = "98%";
           break;
       }
     }

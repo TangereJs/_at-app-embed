@@ -1,7 +1,7 @@
 {
   "name": "at-app-embed-scaffold",
   "private": true,
-  "version": "1.0.0.82",
+  "version": "1.0.0.100",
   "dependencies": {
     "at-core-router": "TangereJs/at-core-router#master"
   }

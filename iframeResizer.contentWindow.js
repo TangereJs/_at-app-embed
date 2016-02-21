@@ -11,34 +11,35 @@
 	'use strict';
 
 	var
-		autoResize            = true,
-		base                  = 10,
-		bodyBackground        = '',
-		bodyMargin            = 0,
-		bodyMarginStr         = '',
-		bodyPadding           = '',
-		calculateWidth        = false,
-		doubleEventList       = {'resize':1,'click':1},
-		eventCancelTimer      = 128,
-		height                = 1,
-		firstRun              = true,
+		autoResize = true,
+		base = 10,
+		bodyBackground = '',
+		bodyMargin = 0,
+		bodyMarginStr = '',
+		bodyPadding = '',
+		calculateWidth = false,
+		doubleEventList = { 'resize': 1, 'click': 1 },
+		eventCancelTimer = 128,
+		height = 1,
+		firstRun = true,
 		heightCalcModeDefault = 'offset',
-		heightCalcMode        = heightCalcModeDefault,
-		initLock              = true,
-		initMsg               = '',
-		interval              = 32,
-		logging               = true,
-		msgID                 = '[iFrameSizer]',  //Must match host page msg ID
-		msgIdLen              = msgID.length,
-		myID                  = '',
-		publicMethods         = false,
-		resetRequiredMethods  = {max:1,scroll:1,bodyScroll:1,documentElementScroll:1},
-		targetOriginDefault   = '*',
-		target                = window.parent,
-		tolerance             = 0,
-		triggerLocked         = false,
-		triggerLockedTimer    = null,
-		width                 = 1;
+		heightCalcMode = heightCalcModeDefault,
+		initLock = true,
+		initMsg = '',
+		interval = 32,
+		logging = true,
+		msgID = '[iFrameSizer]',  //Must match host page msg ID
+		msgIdLen = msgID.length,
+		myID = '',
+		publicMethods = false,
+		resetRequiredMethods = { max: 1, scroll: 1, bodyScroll: 1, documentElementScroll: 1 },
+		targetOriginDefault = '*',
+		target = window.parent,
+		tolerance = 0,
+		triggerLocked = false,
+		triggerLockedTimer = null,
+		width = 1,
+		parentZone = "";
 
 
 	function addEventListener(el,evt,func){
@@ -119,7 +120,7 @@
 		bodyBackground   = data[9];
 		bodyPadding      = data[10];
 		tolerance = (undefined !== data[11]) ? Number(data[11]) : tolerance;
-		
+		parentZone = data[12];
 	}
 
 	function chkCSS(attr,value){
@@ -203,6 +204,17 @@
 				},
 				getId: function getIdF(){
 					return myID;
+				},
+				getZones: function getZones() {
+				  var myZone = "protected";
+				  var status = window.status;
+
+				  // try to detect IE Intranet zone, when IE IFrame is in different zone access to cookies is restricted
+				  window.status = "Intranet Zone";
+				  if (window.status == "Intranet Zone") myZone = "internal";
+				  window.status = status;
+
+          return { parentZone: parentZone, myZone: myZone }
 				},
 				reset: function resetF(){
 					resetIFrame('parentIFrame.size');
@@ -584,7 +596,7 @@
 			return event.data.split(':')[2] in {'true':1,'false':1};
 		}
 
-		if (isMessageForUs()){
+		if (isMessageForUs()) {		 
 			if (firstRun && isInitMsg()){ //Check msg ID
 				initFromParent();
 			} else if ('reset' === getMessageType()){
