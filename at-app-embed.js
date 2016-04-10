@@ -622,6 +622,10 @@
     if (p >= 0) serverUrl = serverUrl.substring(0, p);
     var src = div.getAttribute("src") || serverUrl + "/Embed";
     var app = div.getAttribute("app") || "";
+    var ticket = div.getAttribute("ticket") || "";
+
+    if(ticket) src = src + "?ticket="+ticket;
+
     var iframe = document.createElement('iframe');
     iframe.id = "aae" + cntr;
     iframe.frameBorder = 0;
