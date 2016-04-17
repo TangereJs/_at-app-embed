@@ -55,6 +55,21 @@
       width: 48px;
     }
 
+    @media (max-width: 500px) {
+      .bar {
+        padding: 0px 8px 0px 14px !important;
+        height: 60px;        
+      }
+      
+      .internalheader1: {
+        margin-top: 16px;
+      }
+      
+      .mainwrapper {
+        padding-top: 60px;
+      }
+    }
+    
   </style>
   <template>
     <at-core-theme></at-core-theme>
@@ -66,7 +81,7 @@
       </div>
       <div class="layout horizontal flex">
         <header id="internalheader">
-          <div class="layout vertical center"><h1>{{caption}}</h1></div>
+          <div class="layout vertical center"><h1 class="internalheader1">{{caption}}</h1></div>
         </header>
       </div>
       <div id="busy">
