@@ -1,6 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../layout/layout.html">
-<link rel="import" href="../core-media-query/core-media-query.html">
+<link rel="import" href="../at-core-media-query/at-core-media-query.html">
 <link rel="import" href="../at-core-signals/at-core-signals.html">
 <link rel="import" href="../at-core-busy/at-core-busy.html">
 <link rel="import" href="../at-carbon-icon/at-carbon-icon.html">
@@ -74,7 +74,7 @@
   <template>
     <at-core-theme></at-core-theme>
     <at-core-signals on-before-navigate="beforeNavigate" on-navigate-back-status="navigateBackStatus" on-app-caption="appCaption"></at-core-signals>
-    <core-media-query id="mq" query="min-width: 1025px" on-query-matches-changed="mqChanged"></core-media-query>
+    <at-core-media-query id="mq" query="min-width: 1025px" on-query-matches-changed="mqChanged"></at-core-media-query>
     <div id="bar" class="bar layout horizontal center">
       <div class="layout horizontal center" id="back" on-tap="backClick">
         <at-carbon-icon icon="now:arrow-left"></at-carbon-icon>
@@ -130,7 +130,7 @@
 
     appCaption: function (e) {
       this.caption = e.detail;
-      
+      debugger;
       // hide loading animation, *todo* consider moving logic back to at-app-session to keep show/hide of animation in one element
       if (!this._firstViewShown) {
         var splash = document.getElementById("splash");

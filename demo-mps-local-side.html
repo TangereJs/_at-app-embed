@@ -21,15 +21,10 @@
 </head>
 
 
-<body touch-action="auto">
-  <div style="width:calc(50% - 10px); float:left;border:5px solid yellow;">
-    <div class="at-app-embed" src="http://localhost:2014/components/at-app-embed/at-app-embed.html"></div>
-    <script src="at-app-embed.js" async></script>
-  </div>
-  <div style="width:calc(50% - 10px); float:left;border:5px solid green;">
-    <script src="at-app-embed.js" async></script>
-    <div class="at-app-embed" app="at-app-scaffold/demo-home?who=test2"></div>
-  </div>
+<body>
+  <div id="toggle">Toggle</div>
+  <script src="http://localhost:2014/components/at-app-embed/at-app-embed.js" async></script>
+  <div class="at-app-embed" app="at-now/start-now" mode="side" trigger="toggle"></div>
 </body>
 
 </html>
