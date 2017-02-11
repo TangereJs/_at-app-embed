@@ -93,7 +93,7 @@
     function resizeIFrame() {
       function resize() {
         setSize(messageData);
-        setPagePosition();
+        // *test* why is that needed? causes loss of page position -- setPagePosition();
         settings.resizedCallback(messageData);
       }
 
@@ -290,7 +290,7 @@
   function setPagePosition() {
     if (null !== pagePosition) {
       window.scrollTo(pagePosition.x, pagePosition.y);
-      log(' Set position: ' + pagePosition.x + ',' + pagePosition.y);
+      log(' Set position: ' + pagePosition.x + ',' + pagePosition.y);     
       pagePosition = null;
     }    
   }
@@ -507,7 +507,16 @@
 
     var ifs = document.getElementsByClassName("at-app-embed");
     for (var i = 0; i < ifs.length; i++) {
-      createIFrameForDiv(ifs[i], i);
+        createIFrameForDiv(ifs[i], i);
+        ifs[i].style.position = "relative";
+        ifs[i].style.zIndex = "20001";
+        
+        var style = window.getComputedStyle(document.body);
+        var bgColor = style.getPropertyValue("background-color");
+
+        // use body background color if container has no background color assigned
+        if (!ifs[i].style.backgroundColor) ifs[i].style.backgroundColor = bgColor;
+        
     }
 
     var options = {};
@@ -527,6 +536,63 @@
           msg.iframe.scrollIntoView();
           msg.iframe.style.height = "98%";
           break;
+
+        case 'scroll-to':
+            msg.iframe.parentNode.scrollTop = msg.message.y;
+            msg.iframe.parentNode.scrollLeft = msg.message.x;
+            break;
+
+        case 'position-push':
+            this._positions = this._positions || [];
+
+            var el = msg.iframe.parentNode;
+            if (!msg.iframe.getAttribute("xsidemode")) {
+              // when not running in side mode we scroll the whole body and not just the container
+                el = document.body;
+            }
+
+            // show overlay when first push happens
+            if (this._positions.length == 0) {
+                
+                var mask = document.getElementById(msg.iframe.id + "mask");
+                if (mask) {
+                    mask.style.display = "block";
+                    mask.style.opacity = 0.77;
+                }
+            }
+
+            this._positions.push({ x: el.scrollLeft, y: el.scrollTop });       
+            
+            el.scrollTop = msg.message.y;
+            el.scrollLeft = msg.message.x;
+            break;
+
+        case 'position-pop':
+            this._positions = this._positions || [];
+
+            var el = msg.iframe.parentNode;
+            if (!msg.iframe.getAttribute("xsidemode")) {
+                // when not running in side mode we scroll the whole body and not just the container
+                el = document.body;
+            }
+
+            if (this._positions.length) {
+              var lp = this._positions.pop();
+              el.scrollTop = lp.y;
+              el.scrollLeft = lp.x;
+            }
+
+            // hide overlay when first push happens
+            if (this._positions.length == 0) {
+                
+                var mask = document.getElementById(msg.iframe.id + "mask");
+                if (mask) {
+                    mask.style.display = "none";
+                    mask.style.opacity = 0;
+                }
+            }
+
+            break;
       }
     }
 
@@ -634,12 +700,16 @@
     iframe.setAttribute("xsrc", src);
     iframe.setAttribute("xapp", app);
 
+    if (sideMode) {
+      iframe.setAttribute("xsidemode", "1");
+    }
+
     div.appendChild(iframe);
 
-    if (sideMode) {
+
       var mask = document.createElement('div');
       mask.id = "aae" + cntr + "mask";
-      style = "display: none; position: fixed;top: 0;left: 0;right: 0;bottom: 0; background-color: black;-webkit-transform: translate3d(0, 0, 0);";
+      style = "display: none; position: fixed;top: 0;left: 0;right: 0;bottom: 0; background-color: #404040;-webkit-transform: translate3d(0, 0, 0);";
       style += "transform: translate3d(0, 0, 0);z-index: 20000;-webkit-transition: opacity 0.3s ease-in-out;-moz-transition: opacity 0.3s ease-in-out;-ms-transition: opacity 0.3s ease-in-out;";
       style += "-o-transition: opacity 0.3s ease-in-out;transition: opacity 0.3s ease-in-out;opacity:0";
       mask.setAttribute('style', style);
@@ -647,6 +717,7 @@
       // Prepend mask      
       div.parentNode.insertBefore(mask, div);
 
+   if (sideMode) {
       if (!triggerEl) {
         alert("sidebar mode requires attribute trigger='id'");
 
@@ -658,7 +729,7 @@
           div.style.display = "block";
           document.body.style.overflow = "hidden";
           setTimeout(function () {
-            mask.style.opacity = 0.5;
+            mask.style.opacity = 0.77;
             div.style.right = 0;
           }, 10);
           
