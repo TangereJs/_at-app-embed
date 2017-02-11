@@ -508,8 +508,11 @@
     var ifs = document.getElementsByClassName("at-app-embed");
     for (var i = 0; i < ifs.length; i++) {
         createIFrameForDiv(ifs[i], i);
-        ifs[i].style.position = "relative";
-        ifs[i].style.zIndex = "20001";
+        
+        if (ifs[i].getAttribute("mode") != "side") {
+            ifs[i].style.position = "relative";
+            ifs[i].style.zIndex = "20001";
+        }
         
         var style = window.getComputedStyle(document.body);
         var bgColor = style.getPropertyValue("background-color");
@@ -546,18 +549,21 @@
             this._positions = this._positions || [];
 
             var el = msg.iframe.parentNode;
-            if (!msg.iframe.getAttribute("xsidemode")) {
-              // when not running in side mode we scroll the whole body and not just the container
-                el = document.body;
-            }
 
-            // show overlay when first push happens
-            if (this._positions.length == 0) {
-                
-                var mask = document.getElementById(msg.iframe.id + "mask");
-                if (mask) {
-                    mask.style.display = "block";
-                    mask.style.opacity = 0.77;
+            // when not running in side mode
+            if (!msg.iframe.getAttribute("xsidemode")) {
+
+                // we scroll the whole body and not just the container
+                el = document.body;
+
+                // show overlay when first push happens
+                if (this._positions.length == 0) {
+
+                    var mask = document.getElementById(msg.iframe.id + "mask");
+                    if (mask) {
+                        mask.style.display = "block";
+                        mask.style.opacity = 0.77;
+                    }
                 }
             }
 
@@ -582,13 +588,15 @@
               el.scrollLeft = lp.x;
             }
 
-            // hide overlay when first push happens
-            if (this._positions.length == 0) {
-                
-                var mask = document.getElementById(msg.iframe.id + "mask");
-                if (mask) {
-                    mask.style.display = "none";
-                    mask.style.opacity = 0;
+            if (!msg.iframe.getAttribute("xsidemode")) {
+                // hide overlay after last pop
+                if (this._positions.length == 0) {
+
+                    var mask = document.getElementById(msg.iframe.id + "mask");
+                    if (mask) {
+                        mask.style.display = "none";
+                        mask.style.opacity = 0;
+                    }
                 }
             }
 
