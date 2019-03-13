@@ -1,104 +1,173 @@
-<link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../layout/layout.html">
+<link rel="import" href="../tangere/tangere.html">
 <link rel="import" href="../at-core-media-query/at-core-media-query.html">
 <link rel="import" href="../at-core-signals/at-core-signals.html">
 <link rel="import" href="../at-core-busy/at-core-busy.html">
 <link rel="import" href="../at-carbon-icon/at-carbon-icon.html">
-<link rel="import" href="../at-core-theme/at-core-theme.html">
+<link rel="import" href="../at-carbon-sidebar/at-carbon-sidebar.html">
+<link rel="import" href="../at-core-searchbox/at-core-searchbox.html">
+<link rel="import" href="../at-now-search/at-now-search.html">
+<link rel="import" href="../at-core-style-classes/at-core-style-classes.html">
+<link rel="import" href="../at-carbon-menu-button/at-carbon-menu-button.html" />
+<link rel="import" href="../at-link/at-link.html">
 
 <dom-module id="at-app-embed-scaffold">
-  <style>
-
-    #hamburger {
-      display: inline-block;
-    }
-
-    .mainwrapper {
-      padding-top: 80px;
-    }
-
-    #menu {
-      cursor: pointer;
-      width: 24px;
-    }
-
-    #back {
-      cursor: pointer;      
-      margin-right: 16px;
-    }
-
-
-    #back at-carbon-icon {       
-    cursor: pointer;
-    width: 32px;
-    height: 32px;
-    border: 1px solid;
-    border-radius: 24px;
-    margin-top: 7px;
-    }
-
-    .bar {
-      width: 100%;
-      padding: 8px !important;
-      height: 80px;
-      z-index: 100;
-      top: 0;
-      left: 0;
-      position: absolute;
-    }
-
-    .bar a {
-      text-decoration: none;
-    }
-
-    at-core-busy {
-      width: 60px;
-    }
-
-    .internalheader1 {
-      @apply(--paper-font-headline);
-    }
-
-    @media (max-width: 500px) {
-      .bar {
-        padding: 0px 8px 0px 14px !important;
-        height: 60px;        
-      }
-      
-      .internalheader1: {
-        margin-top: 16px;
-      }
-      
-      .mainwrapper {
-        padding-top: 60px;
-      }
-    }
-    
-  </style>
   <template>
-    <at-core-theme></at-core-theme>
-    <at-core-signals on-before-navigate="beforeNavigate" on-navigate-back-status="navigateBackStatus" on-app-caption="appCaption"></at-core-signals>
-    <at-core-media-query id="mq" query="min-width: 1025px" on-query-matches-changed="mqChanged"></at-core-media-query>
-    <div id="bar" class="bar layout horizontal center">
-      <div class="layout horizontal center" id="back" on-tap="backClick">
-        <at-carbon-icon icon="now:arrow-left"></at-carbon-icon>
-      </div>
-      <div class="layout horizontal flex">
-        <header id="internalheader">
-          <div class="layout vertical center"><h1 class="internalheader1">{{caption}}</h1></div>
-        </header>
-      </div>
-      <div id="busy">
-        <div class="layout vertical center ">
-          <at-core-busy type="wave"></at-core-busy>
+    <style include="at-core-style-classes"></style>
+    <style>
+      #top {
+        width: 100%;       
+        height: 111px;
+        z-index: 100;
+        top: 0;
+        left: 0;
+        position: absolute;
+        background-color: #ffffff;        
+        box-sizing: border-box;
+      }
+
+      #topWrapper {
+        max-width: 1560px;
+        margin: 0 auto;        
+      }
+
+      #topLeft, #topRight {
+        width: 20px;
+      }
+
+      at-core-searchbox {
+        width: 100%;
+      }
+
+      #contentwrapper, .bar {
+        min-width: 240px;
+        max-width: 1550px;
+        margin: 0 auto;
+      }
+
+      .mainwrapper {
+        padding-top: 110px;
+      }
+
+      #menu {
+        cursor: pointer;
+        width: 24px;
+      }
+
+      #back {
+        cursor: pointer;
+        margin-right: 16px;
+      }
+
+
+        #back at-carbon-icon {
+          cursor: pointer;
+          width: 32px;
+          height: 32px;         
+        }
+
+      .bar {
+        width: 100%;        
+        height: 60px;
+        z-index: 100;
+      }
+
+        .bar a {
+          text-decoration: none;
+        }
+
+      at-core-busy {
+        width: 60px;
+      }
+
+      .internalheader1 {
+        @apply --paper-font-headline;
+      }
+
+      @media (max-width: 500px) {
+        .bar {
+          padding: 0px 8px 0px 14px !important;
+          height: 60px;
+        }
+
+        .internalheader1 {
+          margin-top: 16px;
+        }
+
+        .mainwrapper {
+          padding-top: 90px;
+        }
+      }
+    </style>
+
+    <div id="container">
+      <at-core-signals on-app-ready="_appReady" on-active-view-changed="_activeViewChanged" on-session-ready="_sessionReady" on-global-search-set="_setSearchTerm" on-before-navigate="beforeNavigate" on-navigate-back-status="navigateBackStatus" on-app-caption="appCaption"></at-core-signals>
+      <!--<at-core-media-query id="mq" query="min-width: 1025px" on-query-matches-changed="mqChanged"></at-core-media-query>-->
+
+      <div id="top">
+        <div id="bar" class="bar layout horizontal center">
+          <div class="layout horizontal center" id="back" on-tap="backClick">
+            <at-carbon-icon icon="now:arrow-left"></at-carbon-icon>
+          </div>
+          <div class="layout horizontal flex">
+            <header id="internalheader">
+              <div class="layout vertical center"><h1 class="internalheader1">{{caption}}</h1></div>
+            </header>
+          </div>
+          <div id="busy">
+            <div class="layout vertical center ">
+              <at-core-busy type="wave"></at-core-busy>
+            </div>
+          </div>
+        </div>
+        <div id="topWrapper" class="layout-horizontal layout-justified">
+          <div class="layout-self-center" id="topLeft">
+            <at-link href="#!at-now/start-now">
+              <div class="sidebar-header">
+                <content select=".sidebar-header"></content>
+                <slot name="sidebar-header"></slot>
+              </div>
+            </at-link>
+          </div>
+          <div class="layout-self-center layout-flex">            
+            <at-now-search id="globalSearch" search-term="{{searchTerm}}" select-only></at-now-search>
+          </div>
+
+          <div id="topRight" class="layout-self-center">
+            <div class="layout-horizontal">
+              <div class="layout-flex"></div>
+               <!--<div class="layout-self-center ">
+                <at-core-busy type="wave"></at-core-busy>
+              </div>
+             <div id="menu2" class="layout horizontal">
+                <at-carbon-menu-button id="menuButton" icon="now:menu2" color="gray" on-value-changed="_onMenuValueChanged" position="bottomRight" x-offset="-8" y-offset="-8"></at-carbon-menu-button>
+
+              </div>-->
+            </div>
+          </div>
         </div>
       </div>
-      <!--<div id="menu" on-tap="menuClick" class="layout horizontal">
-        <at-carbon-icon icon="now:menu"></at-carbon-icon>
-      </div>-->
-    </div>
-    <div id="mainwrapper" class="mainwrapper" on-router-navigate="routerNavigate">
-      <content select=".main"></content>
+      <div id="mainwrapper" class="mainwrapper">
+        <div id="barwrapper" style="display:none">
+          <div id="bar" class="bar layout-horizontal layout-justified">
+            <div class="layout-self-center" id="back" on-tap="backClick">
+              <at-carbon-icon icon="now:caret-left"></at-carbon-icon>
+            </div>
+            <div class="layout-self-center">
+              <div class="font-display1">{{caption}}</div>
+            </div>
+            <div id="right" class="layout-self-center">
+              <div class="layout-horizontal">
+                <at-carbon-icon icon="now:blank"></at-carbon-icon>
+                &nbsp;
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="contentwrapper">
+          <content select=".main"></content>
+          <slot name="main"></slot>
+        </div>
+      </div>
     </div>
   </template>
 </dom-module>
@@ -106,48 +175,197 @@
 <script>
   Polymer({
     is: 'at-app-embed-scaffold',
-    _scopeCssViaAttr: true,
     properties: {
       caption: {
         type: String,
         value: '',
         notify: true
+      },
+      searchTerm: {
+        type: String,
+        value: "",
+        notify: true,
+        observer: '_changeSearchTerm'
+      },
+      barColor: {
+        type: String,
+        value: "lightBlue",
+        observer: "_barColorChanged"
       }
+    },
+
+    _onMenuValueChanged: function (event) {
+
+      var value = event.detail.value;
+      var menuButton = this.$.menuButton;
+      var url = "";
+      if (value == "logout") {
+        document.location = "/Users/Account/LogOff";
+        return;
+      }
+
+      Polymer.signal("busy-start-async");
+
+      if (value == "admin") url = "/admin";
+      if (value == "home") url = "#!at-now/start-now";
+      if (value == "mycards") url = "#!at-now/card-store";
+
+      event.detail.value = ""; // reset selection
+      Polymer.signal("navigate-to", url);
+
+    },
+
+    _buildMenu: function () {
+      var menu = [];
+
+      menu.push({
+        title: "Now Home",
+        value: "home",
+        icon: "now:home"
+      });
+
+      menu.push({
+        title: "My Cards",
+        value: "mycards",
+        icon: "now:toggle"
+      });
+
+      if (Tangere.session.user.Roles.indexOf("Administrator") >= 0) {
+        menu.push({
+          title: "Administration",
+          value: "admin",
+          icon: "now:wrench"
+        });
+      }
+
+      menu.push({
+        title: "Logout",
+        value: "logout",
+        icon: "now:exit"
+      });
+
+
+      // this.$.menuButton.items = menu;
+    },
+
+    _setSearchTerm: function (e) {
+      if (this.searchTerm == e.detail.searchTerm) return;
+
+      this._searchTermUpdating = true;
+      this.searchTerm = e.detail.searchTerm;
+      this._searchTermUpdating = false;
+    },
+
+    _changeSearchTerm: function (n, o) {
+      if (this._searchTermUpdating) return;
+
+      var gs = { term: n, handled: false, clear: false };
+
+      // allow current micro app to handle global search request
+      Polymer.signal("global-search", gs);
+
+      if (!gs.handled) {
+        var url = "#at-now/search-now?searchTerm={query}";
+        url = url.replace("{query}", encodeURIComponent(n));
+
+        Polymer.signal("navigate-to", url);
+      }
+      if (gs.clear) this.searchTerm = "";  // reset input
     },
 
     mqChanged: function () {
 
     },
 
+    _barColorChanged: function (value, old) {
+      if (old !== undefined) Polymer.dom(this.$.barwrapper).classList.toggle("background-" + old, false);
+      Polymer.dom(this.$.barwrapper).classList.toggle("background-" + value, true);
+    },
+
+    _activeViewChanged: function (e) {
+
+      var nowHome = (e.detail.name == "start-now");
+      this.$.barwrapper.style.display = nowHome ? "none" : "block";  // hide bar on home page
+    },
+
+    _sessionReady: function () {
+
+      // apply global settings to customize scaffold
+      var naSettings = Tangere.session.user.settings["adenin.GateKeeper.NowAssistant"];
+
+      if (naSettings) {
+        var gs = this.$.globalSearch;
+        gs.placeholder = naSettings.placeholder;
+        gs.service1Title = naSettings.search1label;
+        gs.service1Url = naSettings.search1url;
+        gs.service2Title = naSettings.search2label;
+        gs.service2Url = naSettings.search2url;
+        if (naSettings.source1mode) gs.service1SelectMode = naSettings.source1mode;
+        if (naSettings.source2mode) gs.service2SelectMode = naSettings.source2mode;
+        gs.selectOnly = true;
+      }
+
+      this._buildMenu();
+    },
+
     backClick: function () {
-      window.history.back();
+      if (!this._internalback) {
+        // we don't have a "logical" back - so we go to Home
+        Polymer.signal("navigate-to", "#!at-now/start-now");
+      } else {
+        window.history.back();
+      }
     },
     navigateBackStatus: function (e) {
-      this.$.back.style.display = e.detail ? "block" : "none"
+      //this.$.back.style.visibility = e.detail ? "visible" : "hidden"
+      this._internalBack = e.detail;
     },
-    menuClick: function () {
-      this.sidebar = !this.sidebar;
-    },
+
     beforeNavigate: function (e) {
 
     },
 
-    appCaption: function (e) {
-      this.caption = e.detail;
+    _appReady: function(e) {
 
+      // experimental - fire app-ready to hide loading animation
       // hide loading animation, *todo* consider moving logic back to at-app-session to keep show/hide of animation in one element
+      // don't hide when initial caption is set
       if (!this._firstViewShown) {
         var splash = document.getElementById("splash");
         splash.classList.add("hide");
         this._firstViewShown = true;
       }
+
     },
+
+    appCaption: function (e) {      
+      var caption = e.detail;
+      var initial = false;
+      if (caption.indexOf("~") == 0) {
+        caption = caption.substring(1);
+        initial = true;
+      }
+
+      this.caption = caption;
+      document.title = this.caption;
+
+      // hide loading animation, *todo* consider moving logic back to at-app-session to keep show/hide of animation in one element
+      // don't hide when initial caption is set
+      if (!this._firstViewShown && !initial) {
+        var splash = document.getElementById("splash");
+        splash.classList.add("hide");
+        this._firstViewShown = true;
+      }
+    },
+
     attached: function () {
       this.removeAttribute('unresolved');
     },
     ready: function () {
-      console.log("at-app-embed-scaffold ready");
-      this.router = Polymer.dom(this).querySelector("#router");      
+      //console.log("at-app-now-scaffold ready");
+      var splash = document.getElementById("splash");
+      splash.setAttribute("handler", "at-app-now-scaffold");
+      this.router = Polymer.dom(this).querySelector("#router");
     }
   });
 </script>
